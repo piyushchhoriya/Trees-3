@@ -89,3 +89,92 @@ class Solution {
          return dfs(left.left,right.right) && dfs(left.right, right.left);
     }
 }
+
+//Using BFS traversal
+// Time Complexity :O(n)
+// Space Complexity :O(n)
+// Approach : In this we are doing a level order traversal BFS and we are going and adding 
+// q.add(left.left);
+// q.add(right.right);
+// q.add(left.right);
+// q.add(right.left);
+// and then as the both left and right should be same we are checking if same then fine else we are returning false and breaking a loop
+class Solution {
+    //Global variable 
+    boolean symmetric;
+    public boolean isSymmetric(TreeNode root) {
+        //base case condition check
+        if(root==null){
+            return true;
+        }
+        //initializing a global variable to true;
+        symmetric=true;
+        //calling a BFS traversal
+        bfs(root);
+        return symmetric;
+    }
+    private void bfs(TreeNode root){
+        //Initializing a queue
+        Queue<TreeNode> q = new LinkedList<>();
+        //adding root's left and right and they can be null 
+        q.add(root.left);
+        q.add(root.right);
+        //while loop to traverse a queue
+        while(!q.isEmpty()){
+            TreeNode left=q.poll();
+            TreeNode right=q.poll();
+            //If both are null then we will continue
+            if(left==null && right==null){
+                continue;
+            }
+            //If both are not null as we have checked in above condition and one of them is null then that is the breach 
+            if(left==null || right ==null){
+                symmetric=false;
+                break;
+            }
+            //If both's value is not same then thaat is the breach
+            if(left.val!=right.val){
+                symmetric=false;
+                break;
+            }
+            //We are adding elemment in a queue
+            q.add(left.left);
+            q.add(right.right);
+            q.add(left.right);
+            q.add(right.left);
+        }
+    }
+}
+
+// Code optimization
+
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null){
+            return true;
+        }
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root.left);
+        q.add(root.right);
+        while(!q.isEmpty()){
+            TreeNode left=q.poll();
+            TreeNode right=q.poll();
+            if(left==null && right==null){
+                continue;
+            }
+            if(left==null || right ==null){
+                return false;
+            }
+            if(left.val!=right.val){
+                return false;
+            }
+            q.add(left.left);
+            q.add(right.right);
+            q.add(left.right);
+            q.add(right.left);
+        
+        }
+        return true;
+    }
+}
+    
